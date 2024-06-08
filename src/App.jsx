@@ -1,17 +1,20 @@
 import React from 'react'
+import { Routes, Route } from "react-router-dom";
 
+//Pages or Components
+import Header from './components/Header'
+import Home from './pages/Home';
+import Login from './pages/Login';
+import Register from "./pages/Register"
 function App() {
   return (
     <div>
-      <h1>TODO APP</h1>
-      <p>made by mohammad hamza</p>
-      <form action="">
-        <input type="text" />
-        <button type="submit">Add</button>
-        <button type="submit">Delete</button>
-        <button type="submit">Edit</button>
-        
-      </form>
+      <Header />
+      <Routes>
+        <Route path="/" element={<Home/>} />
+        <Route path="/register" element={<Register/>} />
+        <Route path="/login" element={<Login/>} />
+      </Routes>
     </div>
   )
 }
