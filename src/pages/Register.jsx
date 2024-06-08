@@ -10,16 +10,16 @@ function Register() {
 
   const handleSubmit = async(e) => {
     e.preventDefault();
-    const result = await firebase.registerUser( email, password);
-    navigate("/login")
+    const result = await firebase.registerUser( email, password, name);
+  
   };
-  const navigate = useNavigate();
-  useEffect(()=>{
-    if(firebase.isLoggedIn){
-      //navigate to home
-      navigate("/")
-    }
-  },[firebase, navigate])
+  // const navigate = useNavigate();
+  // useEffect(()=>{
+  //   if(firebase.isLoggedIn){
+  //     //navigate to home
+  //     navigate("/")
+  //   }
+  // },[firebase, navigate])
   return (
     <>
        <section className="flex flex-col md:flex-row h-screen items-center">
