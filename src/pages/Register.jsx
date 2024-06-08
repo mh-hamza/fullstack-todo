@@ -1,6 +1,19 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
+//firebase context
+import { useFirebase } from "../context/Firebase";
 function Register() {
+  const firebase= useFirebase()
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = async(e) => {
+    e.preventDefault();
+    // console.log("Submit")
+    const result = await firebase.registerUser(email, password);
+    // console.log("register user successfully" + result)
+  };
+
   return (
     <>
        <section className="flex flex-col md:flex-row h-screen items-center">
@@ -18,10 +31,12 @@ function Register() {
               Create your account
             </h1>
 
-            <form className="mt-6" action="#" method="POST">
+            <form className="mt-6" onSubmit={handleSubmit}>
               <div>
                 <label className="block text-gray-700">Email Address</label>
                 <input
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   type="email"
                   name=""
                   id=""
@@ -36,6 +51,8 @@ function Register() {
               <div className="mt-4">
                 <label className="block text-gray-700">Password</label>
                 <input
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   type="password"
                   name=""
                   id=""
