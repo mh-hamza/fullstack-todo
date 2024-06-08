@@ -5,6 +5,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   onAuthStateChanged,
+  signOut
 } from "firebase/auth";
 import { toast } from "react-toastify";
 
@@ -58,9 +59,19 @@ export const FirebaseProvider = (props) => {
       toast.error("Login failed: " + error.message);
     }
   };
+   //-----------------------------------------------------
+   const logoutUser = async () => {
+    try {
+      await signOut(firebaseAuth);
+      toast.success("Logout successful!");
+    } catch (error) {
+      console.error("Error during logout:", error);
+      toast.error("Logout failed: " + error.message);
+    }
+  };
 
   return (
-    <FirebaseContext.Provider value={{ registerUser, loginUser,isLoggedIn }}>
+    <FirebaseContext.Provider value={{ registerUser, loginUser,isLoggedIn, logoutUser }}>
       {props.children}
     </FirebaseContext.Provider>
   );
