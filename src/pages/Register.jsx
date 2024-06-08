@@ -1,19 +1,25 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 //firebase context
 import { useFirebase } from "../context/Firebase";
 function Register() {
   const firebase= useFirebase()
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setName] = useState(""); 
 
   const handleSubmit = async(e) => {
     e.preventDefault();
-    // console.log("Submit")
-    const result = await firebase.registerUser(email, password);
-    // console.log("register user successfully" + result)
+    const result = await firebase.registerUser( email, password);
+    navigate("/login")
   };
-
+  const navigate = useNavigate();
+  useEffect(()=>{
+    if(firebase.isLoggedIn){
+      //navigate to home
+      navigate("/")
+    }
+  },[firebase, navigate])
   return (
     <>
        <section className="flex flex-col md:flex-row h-screen items-center">
@@ -32,6 +38,22 @@ function Register() {
             </h1>
 
             <form className="mt-6" onSubmit={handleSubmit}>
+            <div>
+                <label className="block text-gray-700">Your Name</label>
+                <input
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  type="text"
+                  name=""
+                  id=""
+                  placeholder="Enter Your Name"
+                  className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
+                  autoFocus
+                  autoComplete="name"
+                  required
+                />
+              </div>
+
               <div>
                 <label className="block text-gray-700">Email Address</label>
                 <input
@@ -42,7 +64,7 @@ function Register() {
                   id=""
                   placeholder="Enter Email Address"
                   className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
-                  autoFocus
+                  
                   autoComplete="email"
                   required
                 />

@@ -31,6 +31,7 @@ export const FirebaseProvider = (props) => {
     onAuthStateChanged(firebaseAuth, user=>{
       if(user){
         setUser(user);
+
       }
       else{
         setUser(null);
@@ -40,15 +41,16 @@ export const FirebaseProvider = (props) => {
 //-----------------------------------------------------
   const isLoggedIn = user ? true : false;
 //-----------------------------------------------------
-  const registerUser = async (email, password) => {
-    try {
-      await createUserWithEmailAndPassword(firebaseAuth, email, password);
-      toast.success("Registration successful!");
-    } catch (error) {
-      console.error("Error during registration:", error);
-      toast.error("Registration failed: " + error.message);
-    }
-  };
+const registerUser = async ( email, password) => {
+  try {
+    await createUserWithEmailAndPassword(firebaseAuth, email, password);
+    toast.success("Registration successful!");
+  } catch (error) {
+    console.error("Error during registration:", error);
+    toast.error("Registration failed: " + error.message);
+  }
+};
+
   //-----------------------------------------------------
   const loginUser = async (email, password) => {
     try {
