@@ -1,18 +1,26 @@
-import React,{useState} from "react";
-import { Link } from "react-router-dom";
-//firebase 
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+//firebase
 import { useFirebase } from "../context/Firebase";
 function Login() {
-  const firebase= useFirebase()
+  const firebase = useFirebase();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Submit")
+    console.log("Submit");
     const result = await firebase.loginUser(email, password);
-     console.log("Login user successfully" + result)
+    console.log("Login user successfully" + result);
   };
+
+  const  navigate= useNavigate();
+  useEffect(()=>{
+    if(firebase.isLoggedIn){
+      //navigate to home
+      navigate("/")
+    }
+  },[firebase, navigate])
   return (
     <>
       <section className="flex flex-col md:flex-row h-screen items-center">
@@ -34,8 +42,8 @@ function Login() {
               <div>
                 <label className="block text-gray-700">Email Address</label>
                 <input
-                 value={email}
-                 onChange={(e) => setEmail(e.target.value)}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   type="email"
                   name=""
                   id=""
@@ -50,9 +58,9 @@ function Login() {
               <div className="mt-4">
                 <label className="block text-gray-700">Password</label>
                 <input
-                type="password"
-                   value={password}
-                   onChange={(e) => setPassword(e.target.value)}
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   id=""
                   placeholder="Enter Password"
                   minLength="6"
@@ -100,11 +108,7 @@ function Login() {
                   <clipPath id="b">
                     <use xlinkHref="#a" overflow="visible" />
                   </clipPath>
-                  <path
-                    clipPath="url(#b)"
-                    fill="#FBBC05"
-                    d="M0 37V11l17 13z"
-                  />
+                  <path clipPath="url(#b)" fill="#FBBC05" d="M0 37V11l17 13z" />
                   <path
                     clipPath="url(#b)"
                     fill="#EA4335"

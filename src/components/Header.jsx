@@ -45,7 +45,7 @@ function Header() {
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5"
-                viewBox="0 0 20 20"
+                viewBox="5 0 25 15"
                 fill="currentColor"
               >
                 <path fill-rule="evenodd" d="M17 3a1 1 0 01-1 1v12a1 1 0 111-1V4a1 1 0 01-1-1zm-7.707 3.293a1 1 0 010 1.414L10.586 9H3a1 1 0 110-2h7.586l-1.293-1.293a1 1 0 011.414-1.414l3 3a1 1 0 010 1.414l-3 3a1 1 0 01-1.414-1.414z" clip-rule="evenodd"/>
