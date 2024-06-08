@@ -1,6 +1,18 @@
-import React from "react";
+import React,{useState} from "react";
 import { Link } from "react-router-dom";
+//firebase 
+import { useFirebase } from "../context/Firebase";
 function Login() {
+  const firebase= useFirebase()
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = async(e) => {
+    e.preventDefault();
+    console.log("Submit")
+    const result = await firebase.loginUser(email, password);
+     console.log("Login user successfully" + result)
+  };
   return (
     <>
       <section className="flex flex-col md:flex-row h-screen items-center">
@@ -18,10 +30,12 @@ function Login() {
               Log in to your account
             </h1>
 
-            <form className="mt-6" action="#" method="POST">
+            <form className="mt-6" onSubmit={handleSubmit}>
               <div>
                 <label className="block text-gray-700">Email Address</label>
                 <input
+                 value={email}
+                 onChange={(e) => setEmail(e.target.value)}
                   type="email"
                   name=""
                   id=""
@@ -36,8 +50,9 @@ function Login() {
               <div className="mt-4">
                 <label className="block text-gray-700">Password</label>
                 <input
-                  type="password"
-                  name=""
+                type="password"
+                   value={password}
+                   onChange={(e) => setPassword(e.target.value)}
                   id=""
                   placeholder="Enter Password"
                   minLength="6"

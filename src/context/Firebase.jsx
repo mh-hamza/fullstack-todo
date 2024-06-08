@@ -1,6 +1,6 @@
 import { createContext, useContext } from "react";
 import { initializeApp } from "firebase/app";
-import { getAuth, createUserWithEmailAndPassword} from "firebase/auth"
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword} from "firebase/auth"
 import { toast } from "react-toastify";
 
 
@@ -31,9 +31,19 @@ export const FirebaseProvider = (props) => {
       toast.error("Registration failed: " + error.message);
     }
   };
+  const loginUser = async(email, password) => {
+    try{
+      await signInWithEmailAndPassword(firebaseAuth, email, password);
+      toast.success("Login successful!");
+    }
+    catch (error) {
+      console.error("Error during Login:", error);
+      toast.error("Login failed: " + error.message);
+    }
+  }
 
   return (
-    <FirebaseContext.Provider value={{registerUser}}>
+    <FirebaseContext.Provider value={{registerUser,loginUser}}>
       {props.children}
     </FirebaseContext.Provider>
   );
