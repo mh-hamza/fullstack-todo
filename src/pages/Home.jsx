@@ -1,30 +1,26 @@
-import React, { useEffect, useState } from "react";
-import { useFirebase } from "../context/Firebase"; // Adjust the path as necessary
+import React, { useState, useEffect } from "react";
+import { useFirebase } from "../context/Firebase";
 
 const Home = () => {
-  const { getUsers } = useFirebase();
-  const [users, setUsers] = useState([]);
-
-  useEffect(() => {
-    const fetchUsers = async () => {
-      const userList = await getUsers();
-      setUsers(userList);
-    };
-    fetchUsers();
-  }, [getUsers]);
-
+  const firebase = useFirebase()
+ const [name , setName] = useState("")
+ const [email , setEmail] = useState("")
+ 
+ useEffect(()=>{
+  const getdata = async()=>{
+    const data = await firebase.getDocument()
+    if(data){
+      setName(data.name)
+      setEmail(data.email)
+    }
+   }
+   getdata()
+ },[firebase])
   return (
     <div>
-     
-      <ul>
-        {users.map((user, index) => (
-          <div key={index}>
-             <h1>Welcome to {user.name}</h1>
-            <h1> {user.name} </h1>
-            <p>({user.email})</p>
-          </div>
-        ))}
-      </ul>
+      <h1>Welcome {name}</h1>
+      <p>Email: {email}</p>
+      <button >Get data</button>
     </div>
   );
 };

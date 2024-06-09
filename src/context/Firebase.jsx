@@ -32,16 +32,16 @@ const firestore = getFirestore(firebaseApp);
 export const FirebaseProvider = (props) => {
   const [user, setUser] = useState(null);
 
-  useEffect(() => {
-    onAuthStateChanged(firebaseAuth, user=>{
-      if(user){
-        setUser(user);
 
-      }
-      else{
+
+  useEffect(() => {
+    onAuthStateChanged(firebaseAuth, async(user)=>{
+      if (user) {
+        setUser(user);
+      } else {
         setUser(null);
       }
-    })
+    });
   }, []);
 //-----------------------------------------------------
   const isLoggedIn = user ? true : false;
@@ -85,26 +85,20 @@ const registerUser = async ( email, password, name) => {
     }
   };
 //-------------------------------------------------------------
-const getUsers = async () => {
-  try {
-    const querySnapshot = await getDocs(collection(firestore, "users"));
-    const users = querySnapshot.docs.map(doc => doc.data());
-    return users;
-  } catch (error) {
-    console.error("Error fetching users:", error);
-    toast.error("Failed to fetch users: " + error.message);
-    return [];
-  }
-};
+const getDocument = async()=>{
+  const ref = doc(firestore, "users", "dLeSneZvqDzrq3oHXy0X")
+  const snap = await getDoc(ref)
+  return snap.data()
+}
 
   return (
     <FirebaseContext.Provider value={{ 
       registerUser, 
-      loginUser,
+      loginUser, 
       isLoggedIn, 
       logoutUser, 
-      getUsers ,
-      user
+      user, 
+      getDocument,
        }}>
       {props.children}
     </FirebaseContext.Provider>
