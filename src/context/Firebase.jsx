@@ -8,8 +8,7 @@ import {
   signOut
 } from "firebase/auth";
 import { toast } from "react-toastify";
-import { addDoc, getFirestore, collection, getDoc, doc, getDocs } from "firebase/firestore";
-
+import { addDoc, getFirestore, collection, getDoc, doc, setDoc, } from "firebase/firestore";
 
 
 
@@ -31,11 +30,10 @@ const firestore = getFirestore(firebaseApp);
 
 export const FirebaseProvider = (props) => {
   const [user, setUser] = useState(null);
-
-
+  const [activeUserDetails, setActiveUserDetails] = useState('');
 
   useEffect(() => {
-    onAuthStateChanged(firebaseAuth, async(user)=>{
+    onAuthStateChanged(firebaseAuth, async (user) => {
       if (user) {
         setUser(user);
       } else {
@@ -43,26 +41,26 @@ export const FirebaseProvider = (props) => {
       }
     });
   }, []);
-//-----------------------------------------------------
+  //-----------------------------------------------------
   const isLoggedIn = user ? true : false;
-//-----------------------------------------------------
-const registerUser = async ( email, password, name) => {
-  try {
-    const userDetail = await createUserWithEmailAndPassword(firebaseAuth, email, password);
-    const user = userDetail.user;
-    console.log(user);
-    // Save user data to Firestore
-    await addDoc(collection(firestore, "users"), {
-      uid: user.uid,
-      email: user.email,
-      name: name
-    });
-    toast.success("Registration successful!");
-  } catch (error) {
-    console.error("Error during registration:", error);
-    toast.error("Registration failed: " + error.message);
-  }
-};
+  //-----------------------------------------------------
+  const registerUser = async (email, password, name) => {
+    try {
+      await createUserWithEmailAndPassword(firebaseAuth, email, password);
+     const activeUser = firebaseAuth.currentUser
+     if(activeUser){
+      await setDoc(doc(firestore, "users", activeUser.uid),{
+          name: name,
+          email: activeUser.email,
+          uid: activeUser.uid
+      })
+     }
+      toast.success("Registration successful!");
+    } catch (error) {
+      console.error("Error during registration:", error);
+      toast.error("Registration failed: " + error.message);
+    }
+  };
 
   //-----------------------------------------------------
   const loginUser = async (email, password) => {
@@ -74,32 +72,47 @@ const registerUser = async ( email, password, name) => {
       toast.error("Login failed: " + error.message);
     }
   };
-   //-----------------------------------------------------
-   const logoutUser = async () => {
+  //-----------------------------------------------------
+  const logoutUser = async () => {
     try {
       await signOut(firebaseAuth);
       toast.success("Logout successful!");
+      window.location.href = "/login";
     } catch (error) {
       console.error("Error during logout:", error);
       toast.error("Logout failed: " + error.message);
     }
   };
-//-------------------------------------------------------------
-const getDocument = async()=>{
-  const ref = doc(firestore, "users", "dLeSneZvqDzrq3oHXy0X")
-  const snap = await getDoc(ref)
-  return snap.data()
+  //-------------------------------------------------------------
+  const fetchUserData = async () => {  //there are fetching logged in user details
+    firebaseAuth.onAuthStateChanged(async (user)=>{
+      // console.log("User: " + user)
+      if(user){
+        const docRef = doc(firestore, "users", user.uid)
+        const docSnap = await getDoc(docRef)
+        // console.log(docSnap.data())
+        if(docSnap.exists()){
+          setActiveUserDetails(docSnap.data())
+        }
+        else{
+          setActiveUserDetails('')
+          console.log("Document does not exist")
+        }
+      }
+    })
+     
 }
 
   return (
-    <FirebaseContext.Provider value={{ 
-      registerUser, 
-      loginUser, 
-      isLoggedIn, 
-      logoutUser, 
-      user, 
-      getDocument,
-       }}>
+    <FirebaseContext.Provider value={{
+      registerUser,
+      loginUser,
+      isLoggedIn,
+      logoutUser,
+      user,
+      fetchUserData,
+      activeUserDetails,
+    }}>
       {props.children}
     </FirebaseContext.Provider>
   );

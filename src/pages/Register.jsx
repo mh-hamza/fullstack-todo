@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useFirebase } from "../context/Firebase";
 function Register() {
   const firebase= useFirebase()
+  const navigate = useNavigate()
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState(""); 
@@ -11,15 +12,9 @@ function Register() {
   const handleSubmit = async(e) => {
     e.preventDefault();
     const result = await firebase.registerUser( email, password, name);
-  
+    navigate("/");
   };
-  // const navigate = useNavigate();
-  // useEffect(()=>{
-  //   if(firebase.isLoggedIn){
-  //     //navigate to home
-  //     navigate("/")
-  //   }
-  // },[firebase, navigate])
+
   return (
     <>
        <section className="flex flex-col md:flex-row h-screen items-center">
