@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useFirebase } from "../context/Firebase";
-import AddTodo from "../components/AddTodo";
+// import AddTodo from "../components/AddTodo";
 import ListAllTodos from "../components/ListAllTodos"
 const Home = () => {
   const [user, setUser] = useState("");
@@ -21,9 +21,9 @@ const Home = () => {
         <div className="bg-white p-10 rounded-lg shadow-lg text-center">
           <h1 className="text-3xl font-bold text-gray-800 mb-4">Welcome, {user.name}</h1>
           <p className="text-lg text-gray-600 mb-6">Email: {user.email}</p>
-          <div className="mt-6">
-            <AddTodo />
-          </div>
+         
+            {/* <AddTodo /> */}
+     
           <div>
             <ListAllTodos />
           </div>

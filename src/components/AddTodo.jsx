@@ -41,8 +41,13 @@ const AddTodo = ({ currentTodo, setCurrentTodo }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white p-4 rounded-lg shadow-lg w-full max-w-lg mx-auto mt-8">
-      <h2 className="text-2xl font-bold text-gray-800 mb-4">{currentTodo ? "Edit Todo" : "Add Todo"}</h2>
+    <form
+      onSubmit={handleSubmit}
+      className="bg-white p-4 rounded-lg shadow-lg w-full max-w-lg mx-auto mt-8"
+    >
+      <h2 className="text-2xl font-bold text-gray-800 mb-4">
+        {currentTodo ? "Edit Todo" : "Add Todo"}
+      </h2>
       <input
         type="text"
         value={title}
@@ -50,7 +55,10 @@ const AddTodo = ({ currentTodo, setCurrentTodo }) => {
         placeholder="Enter todo"
         className="border rounded p-2 w-full mb-4"
       />
-      <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded">
+      <button
+        type="submit"
+        className="bg-blue-500 text-white py-2 px-4 rounded"
+      >
         {currentTodo ? "Update" : "Add"}
       </button>
     </form>
