@@ -8,7 +8,7 @@ import {
   signOut
 } from "firebase/auth";
 import { toast } from "react-toastify";
-import { addDoc, getFirestore, collection, getDoc, getDocs, doc, setDoc, } from "firebase/firestore";
+import { addDoc, getFirestore, collection, getDoc, getDocs, doc, setDoc, deleteDoc, } from "firebase/firestore";
 
 
 
@@ -140,7 +140,24 @@ export const FirebaseProvider = (props) => {
       return [];
     }
   };
-
+  //-------------------------------------------------------------
+  const deleteUserTodo = async(todoId) => {
+    try {
+      if(user){
+        const todoDocRef = doc(firestore, `users/${user.uid}/todos`, todoId)
+        await deleteDoc(todoDocRef);
+        toast.success("Todo deleted successfully!");
+      }else{
+        console.log("User not logged in");
+        toast.error("User not logged in");
+      }
+    } catch (error) {
+      console.error("Error deleting todo:", error);
+      toast.error("Failed to delete todo: " + error.message);
+    }
+  }
+  //-------------------------------------------------------------
+  
   return (
     <FirebaseContext.Provider value={{
       registerUser,
@@ -151,7 +168,8 @@ export const FirebaseProvider = (props) => {
       fetchUserData,
       addTodoList,
       activeUserDetails,
-      listUsersTodos
+      listUsersTodos,
+      deleteUserTodo
     }}>
       {props.children}
     </FirebaseContext.Provider>
