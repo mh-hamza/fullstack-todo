@@ -5,12 +5,21 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   onAuthStateChanged,
-  signOut
+  signOut,
+  GoogleAuthProvider,
+  signInWithPopup,
 } from "firebase/auth";
 import { toast } from "react-toastify";
-import { addDoc, getFirestore, collection, getDoc, getDocs, doc, setDoc, deleteDoc, } from "firebase/firestore";
-
-
+import {
+  addDoc,
+  getFirestore,
+  collection,
+  getDoc,
+  getDocs,
+  doc,
+  setDoc,
+  deleteDoc,
+} from "firebase/firestore";
 
 const FirebaseContext = createContext(null);
 
@@ -27,10 +36,11 @@ export const useFirebase = () => useContext(FirebaseContext);
 const firebaseApp = initializeApp(firebaseConfig);
 const firebaseAuth = getAuth(firebaseApp);
 const firestore = getFirestore(firebaseApp);
+const googleProvider = new GoogleAuthProvider();
 
 export const FirebaseProvider = (props) => {
   const [user, setUser] = useState(null);
-  const [activeUserDetails, setActiveUserDetails] = useState('');
+  const [activeUserDetails, setActiveUserDetails] = useState("");
 
   useEffect(() => {
     onAuthStateChanged(firebaseAuth, async (user) => {
@@ -47,14 +57,14 @@ export const FirebaseProvider = (props) => {
   const registerUser = async (email, password, name) => {
     try {
       await createUserWithEmailAndPassword(firebaseAuth, email, password);
-     const activeUser = firebaseAuth.currentUser
-     if(activeUser){
-      await setDoc(doc(firestore, "users", activeUser.uid),{
+      const activeUser = firebaseAuth.currentUser;
+      if (activeUser) {
+        await setDoc(doc(firestore, "users", activeUser.uid), {
           name: name,
           email: activeUser.email,
-          uid: activeUser.uid
-      })
-     }
+          uid: activeUser.uid,
+        });
+      }
       toast.success("Registration successful!");
     } catch (error) {
       console.error("Error during registration:", error);
@@ -73,6 +83,28 @@ export const FirebaseProvider = (props) => {
     }
   };
   //-----------------------------------------------------
+  const loginWithGoogle = async () => {
+    try {
+      const result = await signInWithPopup(firebaseAuth, googleProvider);
+      const user = result.user;
+      const userDocRef = doc(firestore, "users", user.uid);
+      const userDoc = await getDoc(userDocRef);
+  
+      if (!userDoc.exists()) {
+        await setDoc(userDocRef, {
+          name: user.displayName,
+          email: user.email,
+          uid: user.uid
+        });
+      }
+      toast.success("Login with Google successful!");
+      window.location.reload(); // Refresh the window
+    } catch (error) {
+      console.error("Error during Google Login:", error);
+      toast.error("Google Login failed: " + error.message);
+    }
+  };
+  //-----------------------------------------------------
   const logoutUser = async () => {
     try {
       await signOut(firebaseAuth);
@@ -84,27 +116,28 @@ export const FirebaseProvider = (props) => {
     }
   };
   //-------------------------------------------------------------
-  const fetchUserData = async () => {  //there are fetching logged in user details
-    firebaseAuth.onAuthStateChanged(async (user)=>{
+  const fetchUserData = async () => {
+    //there are fetching logged in user details
+    firebaseAuth.onAuthStateChanged(async (user) => {
       // console.log("User: " + user)
-      if(user){
-        const docRef = doc(firestore, "users", user.uid)
-        const docSnap = await getDoc(docRef)
+      if (user) {
+        const docRef = doc(firestore, "users", user.uid);
+        const docSnap = await getDoc(docRef);
         // console.log(docSnap.data())
-        if(docSnap.exists()){
-          setActiveUserDetails(docSnap.data())
-        }
-        else{
-          setActiveUserDetails('')
-          console.log("Document does not exist")
+        if (docSnap.exists()) {
+          setActiveUserDetails(docSnap.data());
+        } else {
+          setActiveUserDetails("");
+          console.log("Document does not exist");
         }
       }
-    })
-  }
-   //-------------------------------------------------------------
-   const addTodoList = async (title) => {
+    });
+  };
+  //-------------------------------------------------------------
+  const addTodoList = async (title) => {
     try {
-      if (user) {  // Make sure the user is logged in
+      if (user) {
+        // Make sure the user is logged in
         const userTodosRef = collection(firestore, `users/${user.uid}/todos`);
         await addDoc(userTodosRef, {
           title: title,
@@ -127,7 +160,10 @@ export const FirebaseProvider = (props) => {
       if (user) {
         const todosRef = collection(firestore, `users/${user.uid}/todos`);
         const todosSnapshot = await getDocs(todosRef);
-        const todosList = todosSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        const todosList = todosSnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
         return todosList;
       } else {
         console.log("User not logged in");
@@ -141,13 +177,13 @@ export const FirebaseProvider = (props) => {
     }
   };
   //-------------------------------------------------------------
-  const deleteUserTodo = async(todoId) => {
+  const deleteUserTodo = async (todoId) => {
     try {
-      if(user){
-        const todoDocRef = doc(firestore, `users/${user.uid}/todos`, todoId)
+      if (user) {
+        const todoDocRef = doc(firestore, `users/${user.uid}/todos`, todoId);
         await deleteDoc(todoDocRef);
         toast.success("Todo deleted successfully!");
-      }else{
+      } else {
         console.log("User not logged in");
         toast.error("User not logged in");
       }
@@ -155,22 +191,25 @@ export const FirebaseProvider = (props) => {
       console.error("Error deleting todo:", error);
       toast.error("Failed to delete todo: " + error.message);
     }
-  }
+  };
   //-------------------------------------------------------------
-  
+
   return (
-    <FirebaseContext.Provider value={{
-      registerUser,
-      loginUser,
-      isLoggedIn,
-      logoutUser,
-      user,
-      fetchUserData,
-      addTodoList,
-      activeUserDetails,
-      listUsersTodos,
-      deleteUserTodo
-    }}>
+    <FirebaseContext.Provider
+      value={{
+        registerUser,
+        loginUser,
+        isLoggedIn,
+        logoutUser,
+        user,
+        fetchUserData,
+        addTodoList,
+        activeUserDetails,
+        listUsersTodos,
+        deleteUserTodo,
+        loginWithGoogle,
+      }}
+    >
       {props.children}
     </FirebaseContext.Provider>
   );

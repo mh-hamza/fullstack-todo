@@ -2,11 +2,14 @@ import React, { useState } from 'react';
 import { useFirebase } from "../context/Firebase"
 const AddTodo = () => {
   const [title, setTitle] = useState('')
+
   const firebase = useFirebase()
+
   const todoHandler = async(e)=>{
     e.preventDefault()
     try {
       await firebase.addTodoList(title)
+      setTitle('')
     } catch (error) {
       console.log(error.message)
     }

@@ -13,7 +13,9 @@ function Login() {
     const result = await firebase.loginUser(email, password);
     console.log("Login user successfully" + result);
   };
-
+ const googleLoginHandler = () => {
+  firebase.loginWithGoogle()
+ };
   const  navigate= useNavigate();
   useEffect(()=>{
     if(firebase.isLoggedIn){
@@ -125,7 +127,7 @@ function Login() {
                     d="M48 48L17 24l-4-3 35-10z"
                   />
                 </svg>
-                <span className="ml-4">Log in with Google</span>
+                <span className="ml-4" onClick={googleLoginHandler}>Log in with Google</span>
               </div>
             </button>
 

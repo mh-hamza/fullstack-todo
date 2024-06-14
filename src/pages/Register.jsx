@@ -1,23 +1,32 @@
-import React, { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 //firebase context
 import { useFirebase } from "../context/Firebase";
 function Register() {
-  const firebase= useFirebase()
-  const navigate = useNavigate()
+  const firebase = useFirebase();
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [name, setName] = useState(""); 
+  const [name, setName] = useState("");
 
-  const handleSubmit = async(e) => {
-    e.preventDefault();
-    const result = await firebase.registerUser( email, password, name);
-    navigate("/");
+  const googleLoginHandler = () => {
+    firebase.loginWithGoogle();
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const result = await firebase.registerUser(email, password, name);
+    navigate("/");
+  };
+  useEffect(() => {
+    if (firebase.isLoggedIn) {
+      //navigate to home
+      navigate("/");
+    }
+  }, [firebase, navigate]);
   return (
     <>
-       <section className="flex flex-col md:flex-row h-screen items-center">
+      <section className="flex flex-col md:flex-row h-screen items-center">
         <div className="bg-indigo-600 hidden lg:block md:w-1/2 xl:w-2/3 h-full bg-cover">
           <img
             src="https://images.unsplash.com/photo-1434873740857-1bc5653afda8?q=80&w=1289&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
@@ -33,7 +42,7 @@ function Register() {
             </h1>
 
             <form className="mt-6" onSubmit={handleSubmit}>
-            <div>
+              <div>
                 <label className="block text-gray-700">Your Name</label>
                 <input
                   value={name}
@@ -59,7 +68,6 @@ function Register() {
                   id=""
                   placeholder="Enter Email Address"
                   className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
-                  
                   autoComplete="email"
                   required
                 />
@@ -79,8 +87,6 @@ function Register() {
                   required
                 />
               </div>
-
-              
 
               <button
                 type="submit"
@@ -112,11 +118,7 @@ function Register() {
                   <clipPath id="b">
                     <use xlinkHref="#a" overflow="visible" />
                   </clipPath>
-                  <path
-                    clipPath="url(#b)"
-                    fill="#FBBC05"
-                    d="M0 37V11l17 13z"
-                  />
+                  <path clipPath="url(#b)" fill="#FBBC05" d="M0 37V11l17 13z" />
                   <path
                     clipPath="url(#b)"
                     fill="#EA4335"
@@ -133,7 +135,9 @@ function Register() {
                     d="M48 48L17 24l-4-3 35-10z"
                   />
                 </svg>
-                <span className="ml-4">Log in with Google</span>
+                <span onClick={googleLoginHandler} className="ml-4">
+                  Log in with Google
+                </span>
               </div>
             </button>
 
@@ -150,7 +154,7 @@ function Register() {
         </div>
       </section>
     </>
-  )
+  );
 }
 
-export default Register
+export default Register;
