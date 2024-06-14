@@ -19,6 +19,7 @@ import {
   doc,
   setDoc,
   deleteDoc,
+  updateDoc,
 } from "firebase/firestore";
 
 const FirebaseContext = createContext(null);
@@ -89,12 +90,12 @@ export const FirebaseProvider = (props) => {
       const user = result.user;
       const userDocRef = doc(firestore, "users", user.uid);
       const userDoc = await getDoc(userDocRef);
-  
+
       if (!userDoc.exists()) {
         await setDoc(userDocRef, {
           name: user.displayName,
           email: user.email,
-          uid: user.uid
+          uid: user.uid,
         });
       }
       toast.success("Login with Google successful!");
@@ -192,7 +193,23 @@ export const FirebaseProvider = (props) => {
       toast.error("Failed to delete todo: " + error.message);
     }
   };
-  //-------------------------------------------------------------
+    //-------------------------------------------------------------
+    const editUserTodo = async (todoId, updatedTitle) => {
+      try {
+        if (user) {
+          const todoDocRef = doc(firestore, `users/${user.uid}/todos`, todoId);
+          await updateDoc(todoDocRef, { title: updatedTitle });
+          toast.success("Todo updated successfully!");
+        } else {
+          console.log("User not logged in");
+          toast.error("User not logged in");
+        }
+      } catch (error) {
+        console.error("Error updating todo:", error);
+        toast.error("Failed to update todo: " + error.message);
+      }
+    };
+    //-------------------------------------------------------------
 
   return (
     <FirebaseContext.Provider
@@ -208,6 +225,7 @@ export const FirebaseProvider = (props) => {
         listUsersTodos,
         deleteUserTodo,
         loginWithGoogle,
+        editUserTodo
       }}
     >
       {props.children}

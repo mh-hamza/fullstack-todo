@@ -1,33 +1,58 @@
-import React, { useState } from 'react';
-import { useFirebase } from "../context/Firebase"
-const AddTodo = () => {
-  const [title, setTitle] = useState('')
+import React, { useState, useEffect } from "react";
+import { useFirebase } from "../context/Firebase";
+import { toast } from "react-toastify";
 
-  const firebase = useFirebase()
+const AddTodo = ({ currentTodo, setCurrentTodo }) => {
+  const firebase = useFirebase();
+  const [title, setTitle] = useState("");
 
-  const todoHandler = async(e)=>{
-    e.preventDefault()
-    try {
-      await firebase.addTodoList(title)
-      setTitle('')
-    } catch (error) {
-      console.log(error.message)
+  useEffect(() => {
+    if (currentTodo) {
+      setTitle(currentTodo.title);
+    } else {
+      setTitle("");
     }
-  }
+  }, [currentTodo]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (currentTodo) {
+      // Update the todo
+      try {
+        await firebase.editUserTodo(currentTodo.id, title);
+        toast.success("Todo updated successfully!");
+        setCurrentTodo(null); // Clear the currentTodo
+        setTitle("");
+      } catch (error) {
+        console.error("Error updating todo:", error);
+        toast.error("Failed to update todo: " + error.message);
+      }
+    } else {
+      // Add new todo
+      try {
+        await firebase.addTodoList(title);
+        toast.success("Todo added successfully!");
+        setTitle("");
+      } catch (error) {
+        console.error("Error adding todo:", error);
+        toast.error("Failed to add todo: " + error.message);
+      }
+    }
+  };
+
   return (
-    <form onSubmit={todoHandler}>
-      <div className="flex items-center justify-center bg-white p-4 rounded-full shadow-lg">
-      <input 
-        type="text" 
-        placeholder="Enter your text here" 
+    <form onSubmit={handleSubmit} className="bg-white p-4 rounded-lg shadow-lg w-full max-w-lg mx-auto mt-8">
+      <h2 className="text-2xl font-bold text-gray-800 mb-4">{currentTodo ? "Edit Todo" : "Add Todo"}</h2>
+      <input
+        type="text"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
-        className="w-64 px-4 py-2 border-2 border-gray-200 rounded-full focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-400 transition-all"
+        placeholder="Enter todo"
+        className="border rounded p-2 w-full mb-4"
       />
-      <button className="ml-4 px-6 py-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition-all">
-        Add
+      <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded">
+        {currentTodo ? "Update" : "Add"}
       </button>
-    </div>
     </form>
   );
 };

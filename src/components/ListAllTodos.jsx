@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useFirebase } from "../context/Firebase";
 import { FaTrash, FaEdit } from "react-icons/fa";
+import AddTodo from "./AddTodo"; // Import AddTodo component
 
 const ListAllTodos = () => {
   const firebase = useFirebase();
   const [todos, setTodos] = useState([]);
+  const [currentTodo, setCurrentTodo] = useState(null); // State to hold the current todo being edited
 
   useEffect(() => {
     const fetchTodos = async () => {
@@ -23,8 +25,14 @@ const ListAllTodos = () => {
       console.error("Error deleting todo:", error);
     }
   };
+
+  const handleEditClick = (todo) => {
+    setCurrentTodo(todo); // Set the todo to be edited
+  };
+
   return (
     <div className="bg-white p-4 rounded-lg shadow-lg w-full max-w-lg mx-auto mt-8">
+      <AddTodo currentTodo={currentTodo} setCurrentTodo={setCurrentTodo} /> {/* AddTodo component */}
       <h2 className="text-2xl font-bold text-gray-800 mb-4">Your Todos</h2>
       {todos.length > 0 ? (
         <ul className="space-y-2">
@@ -61,7 +69,7 @@ const ListAllTodos = () => {
                 </button>
                 <button
                   className="text-blue-600 hover:text-blue-800 transition-all"
-                  onClick={() => console.log("Edit clicked for:", todo.id)}
+                  onClick={() => handleEditClick(todo)}
                 >
                   <FaEdit />
                 </button>
