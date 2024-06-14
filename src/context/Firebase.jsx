@@ -8,7 +8,7 @@ import {
   signOut
 } from "firebase/auth";
 import { toast } from "react-toastify";
-import { addDoc, getFirestore, collection, getDoc, doc, setDoc, } from "firebase/firestore";
+import { addDoc, getFirestore, collection, getDoc, getDocs, doc, setDoc, } from "firebase/firestore";
 
 
 
@@ -100,8 +100,46 @@ export const FirebaseProvider = (props) => {
         }
       }
     })
-     
-}
+  }
+   //-------------------------------------------------------------
+   const addTodoList = async (title) => {
+    try {
+      if (user) {  // Make sure the user is logged in
+        const userTodosRef = collection(firestore, `users/${user.uid}/todos`);
+        await addDoc(userTodosRef, {
+          title: title,
+          completed: false,
+          createdAt: new Date(),
+        });
+        toast.success("Todo added successfully!");
+      } else {
+        console.log("User not logged in");
+        toast.error("User not logged in");
+      }
+    } catch (error) {
+      console.error("Error adding todo:", error);
+      toast.error("Failed to add todo: " + error.message);
+    }
+  };
+  //-------------------------------------------------------------
+  const listUsersTodos = async () => {
+    try {
+      if (user) {
+        const todosRef = collection(firestore, `users/${user.uid}/todos`);
+        const todosSnapshot = await getDocs(todosRef);
+        const todosList = todosSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        return todosList;
+      } else {
+        console.log("User not logged in");
+        toast.error("User not logged in");
+        return [];
+      }
+    } catch (error) {
+      console.error("Error fetching todos:", error);
+      toast.error("Failed to fetch todos: " + error.message);
+      return [];
+    }
+  };
 
   return (
     <FirebaseContext.Provider value={{
@@ -111,7 +149,9 @@ export const FirebaseProvider = (props) => {
       logoutUser,
       user,
       fetchUserData,
+      addTodoList,
       activeUserDetails,
+      listUsersTodos
     }}>
       {props.children}
     </FirebaseContext.Provider>
