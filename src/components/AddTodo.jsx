@@ -31,7 +31,7 @@ const AddTodo = ({ currentTodo, setCurrentTodo }) => {
       // Add new todo
       try {
         await firebase.addTodoList(title);
-        toast.success("Todo added successfully!");
+        // toast.success("Todo added successfully!");
         setTitle("");
       } catch (error) {
         console.error("Error adding todo:", error);
