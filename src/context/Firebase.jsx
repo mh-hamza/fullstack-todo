@@ -193,24 +193,36 @@ export const FirebaseProvider = (props) => {
       toast.error("Failed to delete todo: " + error.message);
     }
   };
-    //-------------------------------------------------------------
-    const editUserTodo = async (todoId, updatedTitle) => {
-      try {
-        if (user) {
-          const todoDocRef = doc(firestore, `users/${user.uid}/todos`, todoId);
-          await updateDoc(todoDocRef, { title: updatedTitle });
-          toast.success("Todo updated successfully!");
-        } else {
-          console.log("User not logged in");
-          toast.error("User not logged in");
-        }
-      } catch (error) {
-        console.error("Error updating todo:", error);
-        toast.error("Failed to update todo: " + error.message);
+  //-------------------------------------------------------------
+  const editUserTodo = async (todoId, updatedTitle) => {
+    try {
+      if (user) {
+        const todoDocRef = doc(firestore, `users/${user.uid}/todos`, todoId);
+        await updateDoc(todoDocRef, { title: updatedTitle });
+        toast.success("Todo updated successfully!");
+      } else {
+        console.log("User not logged in");
+        toast.error("User not logged in");
       }
-    };
-    //-------------------------------------------------------------
-
+    } catch (error) {
+      console.error("Error updating todo:", error);
+      toast.error("Failed to update todo: " + error.message);
+    }
+  };
+  //-------------------------------------------------------------
+  const todoCheckbox = async (todoId, isChecked) => {
+    try {
+      if (user) {
+        const todoDocRef = doc(firestore, `users/${user.uid}/todos/${todoId}`);
+        const docSnapshot = await getDoc(todoDocRef);
+        await updateDoc(todoDocRef, { completed: isChecked });
+        console.log(docSnapshot);
+          };   
+      }
+     catch (error) {
+      console.error("Error updating todo:", error);
+    }
+  }
   return (
     <FirebaseContext.Provider
       value={{
@@ -225,7 +237,8 @@ export const FirebaseProvider = (props) => {
         listUsersTodos,
         deleteUserTodo,
         loginWithGoogle,
-        editUserTodo
+        editUserTodo,
+        todoCheckbox
       }}
     >
       {props.children}
