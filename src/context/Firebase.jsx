@@ -110,7 +110,6 @@ export const FirebaseProvider = (props) => {
     try {
       await signOut(firebaseAuth);
       toast.success("Logout successful!");
-      window.location.href = "/login";
     } catch (error) {
       // console.error("Error during logout:", error);
       toast.error("Logout failed: " + error.message);

@@ -2,11 +2,13 @@ import React from "react";
 import { Link } from "react-router-dom";
 //firebase
 import { useFirebase } from "../context/Firebase";
-
+import { useNavigate } from "react-router-dom";
 function Header() {
   const firebase = useFirebase();
+  const navigate = useNavigate();
   const logoutHandler = () => {
     firebase.logoutUser();
+    navigate("/login");
   };
 
   return (
