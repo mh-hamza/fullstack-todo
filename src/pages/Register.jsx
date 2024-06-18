@@ -26,7 +26,7 @@ function Register() {
   }, [firebase, navigate]);
   return (
     <>
-      <section className="flex flex-col md:flex-row h-screen items-center">
+      <section className="flex flex-col md:flex-row h-[600px] items-center">
         <div className="bg-indigo-600 hidden lg:block md:w-1/2 xl:w-2/3 h-full bg-cover">
           <img
             src="https://images.unsplash.com/photo-1434873740857-1bc5653afda8?q=80&w=1289&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
@@ -35,7 +35,7 @@ function Register() {
           />
         </div>
 
-        <div className="bg-white w-full md:max-w-md lg:max-w-full md:mx-auto  md:w-1/2 xl:w-1/3 h-screen px-6 lg:px-16 xl:px-12 flex items-center justify-center">
+        <div className="bg-white w-full md:max-w-md lg:max-w-full md:mx-auto  md:w-1/2 xl:w-1/3  px-6 lg:px-16 xl:px-12 flex items-center justify-center">
           <div className="w-full h-100">
             <h1 className="text-xl md:text-2xl font-bold leading-tight mt-12">
               Create your account

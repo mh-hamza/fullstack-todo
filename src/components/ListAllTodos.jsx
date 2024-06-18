@@ -48,8 +48,8 @@ const ListAllTodos = () => {
 
   return (
     <div className="bg-white p-4 rounded-lg shadow-lg w-full max-w-lg mx-auto mt-8">
-      <AddTodo currentTodo={currentTodo} setCurrentTodo={setCurrentTodo} />
-      <h2 className="text-2xl font-bold text-gray-800 mb-4">Your Todos</h2>
+      <AddTodo currentTodo={currentTodo} setCurrentTodo={setCurrentTodo} />  {/*Add todo components*/} 
+      <h2 className="text-2xl text-gray-600 mb-4 mt-4">Your Todos</h2>
       {todos.length > 0 ? (
         <ul className="space-y-2">
           {todos.map((todo) => (
@@ -76,7 +76,13 @@ const ListAllTodos = () => {
                     </svg>
                   )}
                 </div>
-                <span className="text-gray-800">{todo.title}</span>
+                <span
+                  className={`text-gray-800 ${
+                    todo.completed ? "line-through" : ""
+                  }`}
+                >
+                  {todo.title}
+                </span>
               </div>
 
               <div className="flex">

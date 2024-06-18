@@ -118,21 +118,16 @@ export const FirebaseProvider = (props) => {
   };
   //-------------------------------------------------------------
   const fetchUserData = async () => {
-    //there are fetching logged in user details
-    firebaseAuth.onAuthStateChanged(async (user) => {
-      // console.log("User: " + user)
-      if (user) {
-        const docRef = doc(firestore, "users", user.uid);
-        const docSnap = await getDoc(docRef);
-        // console.log(docSnap.data())
-        if (docSnap.exists()) {
-          setActiveUserDetails(docSnap.data());
-        } else {
-          setActiveUserDetails("");
-          console.log("Document does not exist");
-        }
+    if (user) {
+      const docRef = doc(firestore, "users", user.uid);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        setActiveUserDetails(docSnap.data());
+      } else {
+        setActiveUserDetails("");
+        console.log("Document does not exist");
       }
-    });
+    }
   };
   //-------------------------------------------------------------
   const addTodoList = async (title) => {
