@@ -11,7 +11,7 @@ function Login() {
     e.preventDefault();
     console.log("Submit");
     const result = await firebase.loginUser(email, password);
-    console.log("Login user successfully" + result);
+    // console.log("Login user successfully" + result);
   };
  const googleLoginHandler = () => {
   firebase.loginWithGoogle()
