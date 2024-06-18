@@ -25,12 +25,12 @@ import {
 const FirebaseContext = createContext(null);
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAs2wxfd9vSqKAWu9l4ZXYOtc8Y4bFJLYQ",
-  authDomain: "fullstack-todo-ee628.firebaseapp.com",
-  projectId: "fullstack-todo-ee628",
-  storageBucket: "fullstack-todo-ee628.appspot.com",
-  messagingSenderId: "800832624470",
-  appId: "1:800832624470:web:ac31d08de1656d760ee8f7",
+  apiKey: "",                  //Add your Firebase config here
+  authDomain: "",              //Add your Firebase config here
+  projectId: "",               //Add your Firebase config here  
+  storageBucket: "",           //Add your Firebase config here
+  messagingSenderId: "",       //Add your Firebase config here
+  appId: "",                   //Add your Firebase config here
 };
 
 export const useFirebase = () => useContext(FirebaseContext);
