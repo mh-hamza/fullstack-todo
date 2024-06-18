@@ -51,11 +51,11 @@ const ListAllTodos = () => {
       <AddTodo currentTodo={currentTodo} setCurrentTodo={setCurrentTodo} />  {/*Add todo components*/} 
       <h2 className="text-2xl text-gray-600 mb-4 mt-4">Your Todos</h2>
       {todos.length > 0 ? (
-        <ul className="space-y-2">
-          {todos.map((todo) => (
+        <ul className="space-y-2 ">
+          {todos.map((todo, index) => (
             <li
-              key={todo.id}
-              className="flex items-center justify-between bg-gray-100 p-4 rounded-lg shadow-sm"
+              key={index}
+              className="flex items-center justify-between bg-gray-200 p-4 rounded-lg shadow-sm"
             >
               <div className="flex items-center">
                 <div className="rounded-full border-2 border-gray-500 w-6 h-6 flex items-center justify-center mr-4">

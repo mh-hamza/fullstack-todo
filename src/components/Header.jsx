@@ -14,7 +14,7 @@ function Header() {
       <div className="md:h-16 h-28 mx-auto md:px-4 container flex items-center justify-between flex-wrap md:flex-nowrap">
         {/* Logo */}
         <div className="text-indigo-500 md:order-1">
-          <h1 className="text-2xl font-bold">LOGO</h1>
+          <h1 className="text-2xl font-bold">TASKIFY</h1>
         </div>
         <div className="text-gray-500 order-3 w-full md:w-auto md:order-2">
           <ul className="flex font-semibold justify-between">

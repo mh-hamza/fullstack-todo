@@ -32,7 +32,7 @@ const AddTodo = ({ currentTodo, setCurrentTodo }) => {
       // Add new todo
       try {
         if(title == ""){
-          toast.error("Please enter a todo!");
+          toast.error("Please enter a task!");
           return;
         }
         await firebase.addTodoList(title);
@@ -50,7 +50,7 @@ const AddTodo = ({ currentTodo, setCurrentTodo }) => {
     onSubmit={handleSubmit}
     className="bg-white p-4 rounded-lg shadow-lg w-full max-w-lg mx-auto"
   >
-    <h2 className="text-2xl font-bold text-gray-800 mb-4">
+    <h2 className="text-2xl font-bold text-gray-700 mb-4">
       {currentTodo ? "Edit Todo" : "Add Todo"}
     </h2>
     <div className="flex mb-4">
@@ -59,13 +59,28 @@ const AddTodo = ({ currentTodo, setCurrentTodo }) => {
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         placeholder="Enter todo"
-        className="border rounded-l-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className={`
+          border rounded-l-lg p-2 w-full
+          focus:outline-none focus:ring-2 focus:ring-blue-500
+          transition duration-300 ease-in-out
+          ${currentTodo ? 'bg-gray-100' : 'bg-white'}
+          shadow-sm hover:shadow-md
+        `}
       />
       <button
         type="submit"
-        className="bg-blue-500 text-white py-2 px-4 rounded-r-lg flex items-center"
+        className={`
+          bg-blue-500 text-white py-2 px-4 rounded-r-lg flex items-center
+          hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500
+          transition duration-300 ease-in-out
+          ${currentTodo ? 'text-yellow-500' : ''}
+        `}
       >
-        {currentTodo ? <IoIosSave className="mr-2 text-lg" /> : <h1 className="mr-2 text-2xl font-bold" >+</h1>}
+        {currentTodo ? (
+          <IoIosSave className="mr-2 text-lg" />
+        ) : (
+          <h1 className="mr-2 text-2xl font-bold">+</h1>
+        )}
       </button>
     </div>
   </form>

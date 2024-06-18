@@ -68,7 +68,7 @@ export const FirebaseProvider = (props) => {
       }
       toast.success("Registration successful!");
     } catch (error) {
-      console.error("Error during registration:", error);
+      // console.error("Error during registration:", error);
       toast.error("Registration failed: " + error.message);
     }
   };
@@ -79,7 +79,7 @@ export const FirebaseProvider = (props) => {
       await signInWithEmailAndPassword(firebaseAuth, email, password);
       toast.success("Login successful!");
     } catch (error) {
-      console.error("Error during Login:", error);
+      // console.error("Error during Login:", error);
       toast.error("Login failed: " + error.message);
     }
   };
@@ -101,7 +101,7 @@ export const FirebaseProvider = (props) => {
       toast.success("Login with Google successful!");
       window.location.reload(); // Refresh the window
     } catch (error) {
-      console.error("Error during Google Login:", error);
+      // console.error("Error during Google Login:", error);
       toast.error("Google Login failed: " + error.message);
     }
   };
@@ -112,7 +112,7 @@ export const FirebaseProvider = (props) => {
       toast.success("Logout successful!");
       window.location.href = "/login";
     } catch (error) {
-      console.error("Error during logout:", error);
+      // console.error("Error during logout:", error);
       toast.error("Logout failed: " + error.message);
     }
   };
@@ -125,7 +125,7 @@ export const FirebaseProvider = (props) => {
         setActiveUserDetails(docSnap.data());
       } else {
         setActiveUserDetails("");
-        console.log("Document does not exist");
+        // console.log("Document does not exist");
       }
     }
   };
@@ -142,11 +142,11 @@ export const FirebaseProvider = (props) => {
         });
         toast.success("Todo added successfully!");
       } else {
-        console.log("User not logged in");
+        // console.log("User not logged in");
         toast.error("User not logged in");
       }
     } catch (error) {
-      console.error("Error adding todo:", error);
+      // console.error("Error adding todo:", error);
       toast.error("Failed to add todo: " + error.message);
     }
   };
@@ -162,12 +162,12 @@ export const FirebaseProvider = (props) => {
         }));
         return todosList;
       } else {
-        console.log("User not logged in");
+        // console.log("User not logged in");
         toast.error("User not logged in");
         return [];
       }
     } catch (error) {
-      console.error("Error fetching todos:", error);
+      // console.error("Error fetching todos:", error);
       toast.error("Failed to fetch todos: " + error.message);
       return [];
     }
@@ -180,11 +180,11 @@ export const FirebaseProvider = (props) => {
         await deleteDoc(todoDocRef);
         toast.success("Todo deleted successfully!");
       } else {
-        console.log("User not logged in");
+        // console.log("User not logged in");
         toast.error("User not logged in");
       }
     } catch (error) {
-      console.error("Error deleting todo:", error);
+      // console.error("Error deleting todo:", error);
       toast.error("Failed to delete todo: " + error.message);
     }
   };
@@ -196,11 +196,11 @@ export const FirebaseProvider = (props) => {
         await updateDoc(todoDocRef, { title: updatedTitle });
         toast.success("Todo updated successfully!");
       } else {
-        console.log("User not logged in");
+        // console.log("User not logged in");
         toast.error("User not logged in");
       }
     } catch (error) {
-      console.error("Error updating todo:", error);
+      // console.error("Error updating todo:", error);
       toast.error("Failed to update todo: " + error.message);
     }
   };
@@ -211,11 +211,11 @@ export const FirebaseProvider = (props) => {
         const todoDocRef = doc(firestore, `users/${user.uid}/todos/${todoId}`);
         const docSnapshot = await getDoc(todoDocRef);
         await updateDoc(todoDocRef, { completed: isChecked });
-        console.log(docSnapshot);
+        // console.log(docSnapshot);
           };   
       }
      catch (error) {
-      console.error("Error updating todo:", error);
+      toast.error("Error updating todo:", error);
     }
   }
   return (

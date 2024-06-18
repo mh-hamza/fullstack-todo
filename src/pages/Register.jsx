@@ -29,7 +29,7 @@ function Register() {
       <section className="flex flex-col md:flex-row h-[600px] items-center">
         <div className="bg-indigo-600 hidden lg:block md:w-1/2 xl:w-2/3 h-full bg-cover">
           <img
-            src="https://images.unsplash.com/photo-1434873740857-1bc5653afda8?q=80&w=1289&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            src="https://images.unsplash.com/photo-1616326879018-ea98b14deb33?q=80&w=1287&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             alt=""
             className="w-full h-full object-cover"
           />
@@ -48,8 +48,8 @@ function Register() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   type="text"
-                  name=""
-                  id=""
+             
+                  id="name"
                   placeholder="Enter Your Name"
                   className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
                   autoFocus
@@ -64,8 +64,8 @@ function Register() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   type="email"
-                  name=""
-                  id=""
+         
+                  id="email"
                   placeholder="Enter Email Address"
                   className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
                   autoComplete="email"
@@ -79,8 +79,7 @@ function Register() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   type="password"
-                  name=""
-                  id=""
+                  id="password"
                   placeholder="Enter Password"
                   minLength="6"
                   className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
